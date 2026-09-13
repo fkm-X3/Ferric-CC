@@ -1,4 +1,6 @@
-# CCC — Claude's C Compiler
+# FCC, Ferric's C compiler
+
+A C compiler written in rust (orginally Claudes C compiler, )
 
 A C compiler written entirely from scratch in Rust, targeting x86-64, i686,
 AArch64, and RISC-V 64. Zero compiler-specific dependencies — the frontend,

@@ -1,0 +1,13 @@
+Ferric-CC
+Copyright 2026 fkm-X3
+
+This product includes software originally developed as "CCC" / "Claudes C Compiler", by Anthropic.
+
+Original Work:
+  * Originally licensed under CC0 1.0 Universal (Public Domain Dedication).
+  * Original repository: https://github.com/anthropics/claudes-c-compiler
+
+Modifications:
+  * Ported and optimized for Ferric-OS.
+  * Added custom optimization passes and target integration.
+  * Re-licensed under the Apache License, Version 2.0 for this fork.
