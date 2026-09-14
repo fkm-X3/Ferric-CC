@@ -1,4 +1,4 @@
-/* CCC compiler bundled pmmintrin.h - SSE3 intrinsics */
+/* Ferric-CC compiler bundled pmmintrin.h - SSE3 intrinsics */
 #ifndef _PMMINTRIN_H_INCLUDED
 #define _PMMINTRIN_H_INCLUDED
 

@@ -1,4 +1,4 @@
-/* CCC compiler bundled avx512fintrin.h - AVX-512 Foundation intrinsics */
+/* Ferric-CC compiler bundled avx512fintrin.h - AVX-512 Foundation intrinsics */
 #ifndef _AVX512FINTRIN_H_INCLUDED
 #define _AVX512FINTRIN_H_INCLUDED
 

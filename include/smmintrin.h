@@ -1,4 +1,4 @@
-/* CCC compiler bundled smmintrin.h - SSE4.1 / SSE4.2 intrinsics */
+/* Ferric-CC compiler bundled smmintrin.h - SSE4.1 / SSE4.2 intrinsics */
 #ifndef _SMMINTRIN_H_INCLUDED
 #define _SMMINTRIN_H_INCLUDED
 
@@ -20,15 +20,15 @@
 
 /* _mm_insert_epi8: insert 8-bit int at lane (PINSRB) */
 #define _mm_insert_epi8(a, i, imm) \
-    __CCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrb128((a), (i), (imm)))
+    __FCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrb128((a), (i), (imm)))
 
 /* _mm_insert_epi32: insert 32-bit int at lane (PINSRD) */
 #define _mm_insert_epi32(a, i, imm) \
-    __CCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrd128((a), (i), (imm)))
+    __FCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrd128((a), (i), (imm)))
 
 /* _mm_insert_epi64: insert 64-bit int at lane (PINSRQ) */
 #define _mm_insert_epi64(a, i, imm) \
-    __CCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrq128((a), (i), (imm)))
+    __FCC_M128I_FROM_BUILTIN(__builtin_ia32_pinsrq128((a), (i), (imm)))
 
 /* === SSE4.1 comparison intrinsics === */
 

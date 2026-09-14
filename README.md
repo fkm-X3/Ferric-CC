@@ -1,14 +1,13 @@
-# FCC, Ferric's C compiler
+# Ferric-CC, Ferric's C compiler
 
-A C compiler written in rust (orginally Claudes C compiler, )
+A C compiler written in Rust, forked from Claude's C Compiler.
 
 A C compiler written entirely from scratch in Rust, targeting x86-64, i686,
 AArch64, and RISC-V 64. Zero compiler-specific dependencies — the frontend,
 SSA-based IR, optimizer, code generator, peephole optimizers, assembler,
 linker, and DWARF debug info generation are all implemented from scratch.
-Claude's C Compiler produces ELF executables without any external toolchain.
+Ferric-CC produces ELF executables without any external toolchain.
 
-> Note: With the exception of this one paragraph that was written by a human, 100% of the code and documentation in this repository was written by Claude Opus 4.6. A human guided some of this process by writing test cases that Claude was told to pass, but never interactively pair-programmed with Claude to debug or to provide feedback on code quality. As a result, I do not recommend you use this code! None of it has been validated for correctness. Claude wrote this exclusively on a Linux host; it probably will not work on MacOS/Windows — neither I nor Claude have tried. The docs may be wrong and make claims that are false. See [our blog post](https://anthropic.com/engineering/building-c-compiler) for more detail.
 
 ## Prerequisites
 
@@ -31,11 +30,11 @@ source. The target architecture is selected by the binary name at runtime:
 
 | Binary | Target |
 |--------|--------|
-| `ccc` | x86-64 (default) |
-| `ccc-x86` | x86-64 |
-| `ccc-arm` | AArch64 |
-| `ccc-riscv` | RISC-V 64 |
-| `ccc-i686` | i686 (32-bit x86) |
+| `ferric-cc` | x86-64 (default) |
+| `ferric-cc-x86` | x86-64 |
+| `ferric-cc-arm` | AArch64 |
+| `ferric-cc-riscv` | RISC-V 64 |
+| `ferric-cc-i686` | i686 (32-bit x86) |
 
 ## Quick Start
 
@@ -46,60 +45,60 @@ Compile and run a simple C program:
 cat > hello.c << 'EOF'
 #include <stdio.h>
 int main(void) {
-    printf("Hello from CCC!\n");
+    printf("Hello from Ferric-CC!\n");
     return 0;
 }
 EOF
 
 # Compile and run (x86-64)
-./target/release/ccc -o hello hello.c
+./target/release/ferric-cc -o hello hello.c
 ./hello
 
 # Cross-compile for AArch64 and run under QEMU
-./target/release/ccc-arm -o hello-arm hello.c
+./target/release/ferric-cc-arm -o hello-arm hello.c
 qemu-aarch64 -L /usr/aarch64-linux-gnu ./hello-arm
 ```
 
-CCC works as a drop-in GCC replacement. Point your build system at it:
+Ferric-CC works as a drop-in GCC replacement. Point your build system at it:
 
 ```bash
 # Build a project with make
-make CC=/path/to/ccc-x86
+make CC=/path/to/ferric-cc-x86
 
 # Build a project with CMake
-cmake -DCMAKE_C_COMPILER=/path/to/ccc-x86 ..
+cmake -DCMAKE_C_COMPILER=/path/to/ferric-cc-x86 ..
 
 # Build a project with configure scripts
-./configure CC=/path/to/ccc-x86
+./configure CC=/path/to/ferric-cc-x86
 ```
 
 ## Usage
 
 ```bash
 # Compile and link
-ccc -o output input.c                # x86-64
-ccc-arm -o output input.c            # AArch64
-ccc-riscv -o output input.c          # RISC-V 64
-ccc-i686 -o output input.c           # i686
+ferric-cc -o output input.c                # x86-64
+ferric-cc-arm -o output input.c            # AArch64
+ferric-cc-riscv -o output input.c          # RISC-V 64
+ferric-cc-i686 -o output input.c           # i686
 
 # GCC-compatible flags
-ccc -S input.c                       # Emit assembly
-ccc -c input.c                       # Compile to object file
-ccc -E input.c                       # Preprocess only
-ccc -O2 -o output input.c            # Optimize (accepts -O0 through -O3, -Os, -Oz)
-ccc -g -o output input.c             # DWARF debug info
-ccc -DFOO=1 -Iinclude/ input.c       # Define macros, add include paths
-ccc -Werror -Wall input.c            # Warning control
-ccc -fPIC -shared -o lib.so lib.c    # Position-independent code
-ccc -x c -E -                        # Read from stdin
+ferric-cc -S input.c                       # Emit assembly
+ferric-cc -c input.c                       # Compile to object file
+ferric-cc -E input.c                       # Preprocess only
+ferric-cc -O2 -o output input.c            # Optimize (accepts -O0 through -O3, -Os, -Oz)
+ferric-cc -g -o output input.c             # DWARF debug info
+ferric-cc -DFOO=1 -Iinclude/ input.c       # Define macros, add include paths
+ferric-cc -Werror -Wall input.c            # Warning control
+ferric-cc -fPIC -shared -o lib.so lib.c    # Position-independent code
+ferric-cc -x c -E -                        # Read from stdin
 
 # Build system integration (reports as GCC 14.2.0 for compatibility)
-ccc -dumpmachine     # x86_64-linux-gnu / aarch64-linux-gnu / riscv64-linux-gnu / i686-linux-gnu
-ccc -dumpversion     # 14
+ferric-cc -dumpmachine   # x86_64-linux-gnu / aarch64-linux-gnu / riscv64-linux-gnu / i686-linux-gnu
+ferric-cc -dumpversion   # 14
 ```
 
 The compiler accepts most GCC flags. Unrecognized flags (e.g., architecture-
-specific `-m` flags, unknown `-f` flags) are silently ignored so `ccc` can
+specific `-m` flags, unknown `-f` flags) are silently ignored so `ferric-cc` can
 serve as a drop-in GCC replacement in build systems.
 
 ### Assembler and Linker Modes
@@ -176,18 +175,18 @@ tests/
     expected.skip.arm   # Skip marker for specific architectures (optional)
 ```
 
-Tests are run by compiling `main.c` with `ccc`, executing the resulting binary,
+Tests are run by compiling `main.c` with `ferric-cc`, executing the resulting binary,
 and comparing stdout and the exit code against the expected files.
 
 ## Environment Variables
 
 | Variable | Purpose |
 |----------|---------|
-| `CCC_TIME_PHASES` | Print per-phase compilation timing to stderr |
-| `CCC_TIME_PASSES` | Print per-pass optimization timing and change counts to stderr |
-| `CCC_DISABLE_PASSES` | Disable specific optimization passes (comma-separated, or `all`) |
-| `CCC_KEEP_ASM` | Preserve intermediate `.s` files next to output |
-| `CCC_ASM_DEBUG` | Dump preprocessed assembly to `/tmp/asm_debug_<name>.s` |
+| `FCC_TIME_PHASES` | Print per-phase compilation timing to stderr |
+| `FCC_TIME_PASSES` | Print per-pass optimization timing and change counts to stderr |
+| `FCC_DISABLE_PASSES` | Disable specific optimization passes (comma-separated, or `all`) |
+| `FCC_KEEP_ASM` | Preserve intermediate `.s` files next to output |
+| `FCC_ASM_DEBUG` | Dump preprocessed assembly to `/tmp/asm_debug_<name>.s` |
 
 ## Project Organization
 

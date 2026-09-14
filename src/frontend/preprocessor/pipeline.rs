@@ -777,7 +777,7 @@ impl Preprocessor {
         self.macros.set_file(format!("\"{}\"", resolved.display()));
 
         // Preprocess the included content (macros persist; any pragma synthetic tokens
-        // like __ccc_visibility_push_hidden are collected and prepended to main output)
+        // like __fcc_visibility_push_hidden are collected and prepended to main output)
         let output = self.preprocess_included(content);
         // Collect any non-whitespace output (e.g., pragma synthetic tokens) for prepending
         // to the main source's preprocessed output. This ensures that pragmas like

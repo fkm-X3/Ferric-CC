@@ -402,18 +402,18 @@ data or synthetic tokens injected into the output for the parser.
 | Pragma | Behavior |
 |--------|----------|
 | `#pragma once` | Marks the current file in `pragma_once_files`; subsequent `#include` of the same file returns empty. |
-| `#pragma pack(N)` | Emits `__ccc_pack_set_N ;` synthetic token. Suppressed in `asm_mode`. |
-| `#pragma pack()` | Emits `__ccc_pack_reset ;`. Suppressed in `asm_mode`. |
-| `#pragma pack(push, N)` | Emits `__ccc_pack_push_N ;`. Suppressed in `asm_mode`. |
-| `#pragma pack(push)` | Emits `__ccc_pack_push_only ;`. Suppressed in `asm_mode`. |
-| `#pragma pack(pop)` | Emits `__ccc_pack_pop ;`. Suppressed in `asm_mode`. |
+| `#pragma pack(N)` | Emits `__fcc_pack_set_N ;` synthetic token. Suppressed in `asm_mode`. |
+| `#pragma pack()` | Emits `__fcc_pack_reset ;`. Suppressed in `asm_mode`. |
+| `#pragma pack(push, N)` | Emits `__fcc_pack_push_N ;`. Suppressed in `asm_mode`. |
+| `#pragma pack(push)` | Emits `__fcc_pack_push_only ;`. Suppressed in `asm_mode`. |
+| `#pragma pack(pop)` | Emits `__fcc_pack_pop ;`. Suppressed in `asm_mode`. |
 | `#pragma push_macro("X")` | Saves the current definition of macro `X` onto `macro_save_stack`. |
 | `#pragma pop_macro("X")` | Restores the previously saved definition of macro `X`. |
 | `#pragma weak sym` | Appends `(sym, None)` to `weak_pragmas`. |
 | `#pragma weak sym = tgt` | Appends `(sym, Some(tgt))` to `weak_pragmas`. |
 | `#pragma redefine_extname old new` | Appends `(old, new)` to `redefine_extname_pragmas`. |
-| `#pragma GCC visibility push(V)` | Emits `__ccc_visibility_push_V ;` synthetic token. Suppressed in `asm_mode`. |
-| `#pragma GCC visibility pop` | Emits `__ccc_visibility_pop ;`. Suppressed in `asm_mode`. |
+| `#pragma GCC visibility push(V)` | Emits `__fcc_visibility_push_V ;` synthetic token. Suppressed in `asm_mode`. |
+| `#pragma GCC visibility pop` | Emits `__fcc_visibility_pop ;`. Suppressed in `asm_mode`. |
 
 Unrecognized pragmas (including `#pragma GCC diagnostic ...`) are silently
 ignored.
@@ -519,7 +519,7 @@ The returned `String` from `preprocess()` contains:
 - Blank lines preserving the original line numbering.
 - Line markers at include boundaries (`# 1 "header.h" 1` on entry,
   `# N "parent.c" 2` on return).
-- Synthetic pragma tokens (e.g., `__ccc_pack_set_4 ;`).
+- Synthetic pragma tokens (e.g., `__fcc_pack_set_4 ;`).
 
 ### Side-Channel Data
 

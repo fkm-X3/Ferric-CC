@@ -1,4 +1,4 @@
-/* CCC compiler bundled arm_neon.h - ARM NEON intrinsics */
+/* Ferric-CC compiler bundled arm_neon.h - ARM NEON intrinsics */
 #ifndef _ARM_NEON_H_INCLUDED
 #define _ARM_NEON_H_INCLUDED
 

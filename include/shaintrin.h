@@ -1,4 +1,4 @@
-/* CCC compiler bundled shaintrin.h - SHA-NI intrinsics */
+/* Ferric-CC compiler bundled shaintrin.h - SHA-NI intrinsics */
 #ifndef _SHAINTRIN_H_INCLUDED
 #define _SHAINTRIN_H_INCLUDED
 
@@ -83,7 +83,7 @@ _mm_sha1msg2_epu32(__m128i __a, __m128i __b)
  *             E=D, D=C, C=ROL30(B), B=A, A=T
  * Corresponds to x86 SHA1RNDS4 instruction. */
 static __inline__ __m128i __attribute__((__always_inline__))
-__ccc_sha1rnds4(__m128i __a, __m128i __b, int __func)
+__fcc_sha1rnds4(__m128i __a, __m128i __b, int __func)
 {
     unsigned int *__pa = (unsigned int *)&__a;
     unsigned int *__pb = (unsigned int *)&__b;
@@ -117,7 +117,7 @@ __ccc_sha1rnds4(__m128i __a, __m128i __b, int __func)
 }
 /* __func must be a compile-time constant (0-3) per the Intel spec */
 #define _mm_sha1rnds4_epu32(a, b, func) \
-    __ccc_sha1rnds4((a), (b), (func))
+    __fcc_sha1rnds4((a), (b), (func))
 
 /* ========================================================================
  * SHA-256 intrinsics

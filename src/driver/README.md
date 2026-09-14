@@ -225,11 +225,11 @@ The driver reports as GCC 14.2.0 for build system compatibility:
 |-------|----------|
 | `-dumpmachine` | Target triple (e.g., `x86_64-linux-gnu`) |
 | `-dumpversion` | `14` |
-| `--version` | `ccc (Claude's C Compiler, GCC-compatible) 14.2.0` + FSF copyright + backend mode |
+| `--version` | `ferric-cc (Ferric-CC, GCC-compatible) 14.2.0` + FSF copyright + backend mode |
 | `-v` (alone) | Target and version info |
 | `-print-search-dirs` | Standard library directory layout |
 | `-print-file-name=NAME` | Searches standard GCC library paths; returns bundled include dir for `include` |
-| `-Wl,--version` (no inputs) | With `gcc_linker`: delegates to GCC; otherwise prints `GNU ld (Claude's C Compiler built-in) 2.42` for Meson linker detection |
+| `-Wl,--version` (no inputs) | With `gcc_linker`: delegates to GCC; otherwise prints `GNU ld (Ferric-CC built-in) 2.42` for Meson linker detection |
 
 The `--version` output includes "Free Software Foundation" text because Meson
 detects GCC by grepping for that string. It also prints the backend mode
@@ -320,7 +320,7 @@ Between lowering and mem2reg, the driver applies `#pragma weak` and
 
 ### Phase Timing
 
-Set `CCC_TIME_PHASES=1` in the environment to print per-phase wall-clock timing
+Set `FCC_TIME_PHASES=1` in the environment to print per-phase wall-clock timing
 to stderr:
 
 ```
@@ -470,7 +470,7 @@ tokenization enabled) before passing the result to the builtin assembler. For
 `.s` files, the content is read directly.
 
 The builtin assembler path also handles the `-Wa,--version` probe: when
-detected, it prints `GNU assembler (Claude's C Compiler built-in) 2.42` to satisfy the Linux
+detected, it prints `GNU assembler (Ferric-CC built-in) 2.42` to satisfy the Linux
 kernel's `scripts/as-version.sh`.
 
 ### Linker Selection
@@ -636,9 +636,9 @@ computations.
 
 | Variable | Where | Purpose |
 |----------|-------|---------|
-| `CCC_TIME_PHASES` | `pipeline.rs` | Print per-phase compilation timing to stderr |
-| `CCC_ASM_DEBUG` | `external_tools.rs` | Dump preprocessed assembly to `/tmp/asm_debug_<name>.s` |
-| `CCC_KEEP_ASM` | `common::temp_files`, `backend::common` | Preserve intermediate `.s` files next to output (for debugging) |
+| `FCC_TIME_PHASES` | `pipeline.rs` | Print per-phase compilation timing to stderr |
+| `FCC_ASM_DEBUG` | `external_tools.rs` | Dump preprocessed assembly to `/tmp/asm_debug_<name>.s` |
+| `FCC_KEEP_ASM` | `common::temp_files`, `backend::common` | Preserve intermediate `.s` files next to output (for debugging) |
 
 Note: Assembler/linker selection is a compile-time decision via Cargo features
 (`gcc_assembler`, `gcc_linker`), not environment variables. See the top-level
@@ -675,7 +675,7 @@ ordering determines symbol resolution priority.
 Temporary `.o` files in the full compilation mode use `TempFile` guards
 (from `common::temp_files`) that delete the file when dropped. This ensures
 cleanup on all exit paths: normal completion, early `?` returns, and panics.
-The `CCC_KEEP_ASM` mechanism can override this for debugging.
+The `FCC_KEEP_ASM` mechanism can override this for debugging.
 
 ### Bundled Include Directory
 

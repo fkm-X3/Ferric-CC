@@ -1214,7 +1214,7 @@ When using the GCC fallback, each target provides an `AssemblerConfig`
 and `LinkerConfig` that specify the toolchain command, static flags,
 and expected ELF `e_machine` value for input validation.
 
-The `CCC_KEEP_ASM` environment variable preserves the intermediate `.s`
+The `FCC_KEEP_ASM` environment variable preserves the intermediate `.s`
 file next to the output for debugging.
 
 ### Usage Examples
@@ -1222,13 +1222,13 @@ file next to the output for debugging.
 ```bash
 # Default build: builtin assembler and linker (fully self-contained)
 cargo build --release
-./target/release/ccc -o output input.c
+./target/release/ferric-cc -o output input.c
 
 # Build with GCC assembler and linker fallback
 cargo build --release --features gcc_assembler,gcc_linker
 
 # Static linking with builtin linker
-ccc -static file.c -o file
+ferric-cc -static file.c -o file
 ```
 
 ---

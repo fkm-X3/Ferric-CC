@@ -17,7 +17,7 @@ impl Preprocessor {
         }
 
         // Handle #pragma pack directives (suppress in asm mode since these
-        // emit synthetic __ccc_pack_* tokens that the assembler can't parse)
+        // emit synthetic __fcc_pack_* tokens that the assembler can't parse)
         if let Some(pack_content) = rest.strip_prefix("pack") {
             if self.macros.asm_mode {
                 return None;
@@ -48,7 +48,7 @@ impl Preprocessor {
         }
 
         // Handle #pragma GCC visibility push(hidden|default|protected|internal) / pop
-        // Suppressed in asm mode: synthetic __ccc_visibility_* tokens are C parser-
+        // Suppressed in asm mode: synthetic __fcc_visibility_* tokens are C parser-
         // specific and would cause assembler errors when preprocessing .S files.
         if let Some(gcc_content) = rest.strip_prefix("GCC") {
             let gcc_content = gcc_content.trim();
@@ -69,7 +69,7 @@ impl Preprocessor {
     fn handle_pragma_gcc_visibility(&mut self, content: &str) -> Option<String> {
         let content = content.trim();
         if content == "pop" {
-            return Some("__ccc_visibility_pop ;\n".to_string());
+            return Some("__fcc_visibility_pop ;\n".to_string());
         }
         if let Some(rest) = content.strip_prefix("push") {
             let rest = rest.trim();
@@ -77,7 +77,7 @@ impl Preprocessor {
                 let inner = rest.trim_start_matches('(').trim_end_matches(')').trim();
                 match inner {
                     "hidden" | "default" | "protected" | "internal" => {
-                        return Some(format!("__ccc_visibility_push_{} ;\n", inner));
+                        return Some(format!("__fcc_visibility_push_{} ;\n", inner));
                     }
                     _ => {}
                 }
@@ -176,30 +176,30 @@ impl Preprocessor {
 
         if inner.is_empty() {
             // #pragma pack() - reset
-            return Some("__ccc_pack_reset ;\n".to_string());
+            return Some("__fcc_pack_reset ;\n".to_string());
         }
 
         // Check for push/pop
         if inner == "pop" {
-            return Some("__ccc_pack_pop ;\n".to_string());
+            return Some("__fcc_pack_pop ;\n".to_string());
         }
 
         if let Some(rest) = inner.strip_prefix("push") {
             let rest = rest.trim().trim_start_matches(',').trim();
             if rest.is_empty() {
                 // #pragma pack(push) - push current alignment, don't change
-                return Some("__ccc_pack_push_only ;\n".to_string());
+                return Some("__fcc_pack_push_only ;\n".to_string());
             }
             // #pragma pack(push, N) - push current and set to N (0 means default)
             if let Ok(n) = rest.parse::<usize>() {
-                return Some(format!("__ccc_pack_push_{} ;\n", n));
+                return Some(format!("__fcc_pack_push_{} ;\n", n));
             }
             return None;
         }
 
         // #pragma pack(N) - set alignment
         if let Ok(n) = inner.parse::<usize>() {
-            return Some(format!("__ccc_pack_set_{} ;\n", n));
+            return Some(format!("__fcc_pack_set_{} ;\n", n));
         }
 
         None

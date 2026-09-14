@@ -29,16 +29,16 @@ pub fn compiler_main() {
     match handler.join() {
         Ok(Ok(())) => {}
         Ok(Err(e)) => {
-            eprintln!("ccc: error: {}", e);
+            eprintln!("ferric-cc: error: {}", e);
             std::process::exit(1);
         }
         Err(e) => {
             if let Some(s) = e.downcast_ref::<&str>() {
-                eprintln!("ccc: internal error: {}", s);
+                eprintln!("ferric-cc: internal error: {}", s);
             } else if let Some(s) = e.downcast_ref::<String>() {
-                eprintln!("ccc: internal error: {}", s);
+                eprintln!("ferric-cc: internal error: {}", s);
             } else {
-                eprintln!("ccc: internal error (thread panicked)");
+                eprintln!("ferric-cc: internal error (thread panicked)");
             }
             std::process::exit(1);
         }

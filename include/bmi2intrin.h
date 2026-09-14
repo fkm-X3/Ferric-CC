@@ -1,4 +1,4 @@
-/* CCC compiler bundled bmi2intrin.h - BMI2 intrinsics */
+/* Ferric-CC compiler bundled bmi2intrin.h - BMI2 intrinsics */
 #ifndef _BMI2INTRIN_H_INCLUDED
 #define _BMI2INTRIN_H_INCLUDED
 

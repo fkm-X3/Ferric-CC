@@ -97,7 +97,7 @@ GCC-style qualifier aliases (`__const`/`__const__`, `__volatile`/`__volatile__`,
 
 ### 7. Pragma Tokens
 
-The preprocessor rewrites `#pragma pack(...)` and `#pragma GCC visibility ...` directives into synthetic identifier tokens (`__ccc_pack_set_N`, `__ccc_visibility_push_hidden`, etc.). The lexer's `lex_identifier` path recognizes these by prefix and emits structured pragma token variants:
+The preprocessor rewrites `#pragma pack(...)` and `#pragma GCC visibility ...` directives into synthetic identifier tokens (`__fcc_pack_set_N`, `__fcc_visibility_push_hidden`, etc.). The lexer's `lex_identifier` path recognizes these by prefix and emits structured pragma token variants:
 
 - `PragmaPackSet(usize)`, `PragmaPackPush(usize)`, `PragmaPackPushOnly`, `PragmaPackPop`, `PragmaPackReset`
 - `PragmaVisibilityPush(String)`, `PragmaVisibilityPop`
@@ -376,7 +376,7 @@ All string literal contents are stored as Rust `String` values, even though narr
 
 ### Pragma Tokens via Synthetic Identifiers
 
-Rather than having the lexer parse `#pragma` directives directly (which would require context-sensitive state), pragmas are rewritten by the preprocessor into magic identifier names (`__ccc_pack_set_4`, `__ccc_visibility_push_hidden`, etc.) that the lexer recognizes by prefix. This keeps the lexer context-free and puts the pragma parsing complexity in the preprocessor, where it has access to macro expansion and conditional compilation state.
+Rather than having the lexer parse `#pragma` directives directly (which would require context-sensitive state), pragmas are rewritten by the preprocessor into magic identifier names (`__fcc_pack_set_4`, `__fcc_visibility_push_hidden`, etc.) that the lexer recognizes by prefix. This keeps the lexer context-free and puts the pragma parsing complexity in the preprocessor, where it has access to macro expansion and conditional compilation state.
 
 ### No Separate Lexer Error Token
 

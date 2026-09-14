@@ -124,7 +124,7 @@ impl Lowerer {
             // Functions declared with __attribute__((error("..."))) are compile-time
             // assertion functions (e.g., kernel's __bad_mask, __field_overflow).
             // In GCC, these calls are eliminated by inlining + constant folding,
-            // and if they survive, GCC emits a compile error. Since CCC's inliner
+            // and if they survive, GCC emits a compile error. Since Ferric-CC's inliner
             // may not inline all call sites (due to budget/round limits), we must
             // handle surviving calls gracefully.
             //

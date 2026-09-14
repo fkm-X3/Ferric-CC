@@ -247,7 +247,7 @@ Inlining respects per-caller budgets: normal inlining stops when the caller
 exceeds 200 instructions or 800 total inlined instructions, with a hard cap at
 500 instructions (1000 absolute cap). The `always_inline` attribute has its own
 200-instruction budget in the main loop, kept low to prevent stack frame bloat
-(CCC allocates ~8 bytes per SSA value on the stack). When the caller has a
+(Ferric-CC allocates ~8 bytes per SSA value on the stack). When the caller has a
 section attribute (e.g., `.init.text` in the Linux kernel), `always_inline`
 callees bypass the budget entirely, ensuring kernel initialization code is always
 fully inlined.
@@ -864,11 +864,11 @@ iteration via the dirty tracking mechanism rather than the per-pass skip logic.
 ## Disabling Individual Passes
 
 Individual passes can be disabled at runtime for debugging by setting the
-`CCC_DISABLE_PASSES` environment variable to a comma-separated list of pass
+`FCC_DISABLE_PASSES` environment variable to a comma-separated list of pass
 names:
 
 ```
-CCC_DISABLE_PASSES=gvn,licm ./ccc input.c -o output.o
+FCC_DISABLE_PASSES=gvn,licm ./ferric-cc input.c -o output.o
 ```
 
 Recognized names: `all`, `inline`, `cfg`, `copyprop`, `narrow`, `simplify`,
@@ -879,7 +879,7 @@ Setting the variable to `all` skips the entire optimization pipeline.
 Pass timing information can be enabled with:
 
 ```
-CCC_TIME_PASSES=1 ./ccc input.c -o output.o
+FCC_TIME_PASSES=1 ./ferric-cc input.c -o output.o
 ```
 
 This prints per-pass, per-function timing and change counts to stderr, which is

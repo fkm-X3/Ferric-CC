@@ -844,16 +844,16 @@ types derive `Debug`, so Rust's `{:?}` formatter can dump any IR structure,
 though the output is verbose.
 
 The inliner contains a private `dump_function_ir` helper that prints a
-human-readable IR dump to stderr. It is activated via the `CCC_INLINE_DUMP_IR`
+human-readable IR dump to stderr. It is activated via the `FCC_INLINE_DUMP_IR`
 environment variable.
 
 Other useful environment variables for debugging the IR pipeline:
 
 | Variable | Effect |
 |----------|--------|
-| `CCC_DISABLE_PASSES=pass1,pass2,...` | Disable specific optimization passes (e.g., `gvn,licm`). Use `all` to skip the entire optimizer. |
-| `CCC_TIME_PASSES=1` | Print per-pass timing and change counts to stderr. |
-| `CCC_INLINE_DUMP_IR=1` | Dump function IR to stderr after each inlining event. |
+| `FCC_DISABLE_PASSES=pass1,pass2,...` | Disable specific optimization passes (e.g., `gvn,licm`). Use `all` to skip the entire optimizer. |
+| `FCC_TIME_PASSES=1` | Print per-pass timing and change counts to stderr. |
+| `FCC_INLINE_DUMP_IR=1` | Dump function IR to stderr after each inlining event. |
 
 ---
 

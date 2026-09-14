@@ -1,4 +1,4 @@
-/* CCC compiler bundled mmintrin.h - MMX intrinsics */
+/* Ferric-CC compiler bundled mmintrin.h - MMX intrinsics */
 #ifndef _MMINTRIN_H_INCLUDED
 #define _MMINTRIN_H_INCLUDED
 

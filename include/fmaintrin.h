@@ -1,4 +1,4 @@
-/* CCC compiler bundled fmaintrin.h - FMA3 intrinsics */
+/* Ferric-CC compiler bundled fmaintrin.h - FMA3 intrinsics */
 #ifndef _FMAINTRIN_H_INCLUDED
 #define _FMAINTRIN_H_INCLUDED
 

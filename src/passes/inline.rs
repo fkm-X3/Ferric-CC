@@ -34,7 +34,7 @@ const MAX_INLINE_BUDGET_PER_CALLER: usize = 800;
 
 /// Maximum total instruction count for a caller function after inlining.
 /// When the caller exceeds this threshold, normal (non-always_inline) inlining
-/// stops. This prevents stack frame bloat: in CCC's codegen model, each SSA
+/// stops. This prevents stack frame bloat: in Ferric-CC's codegen model, each SSA
 /// value gets a stack slot (~8 bytes), so a function with many instructions
 /// can easily produce a multi-KB stack frame that overflows the kernel's 16KB
 /// stack. GCC enforces similar limits via -fconserve-stack.
@@ -118,7 +118,7 @@ const MAX_STATIC_NONINLINE_BLOCKS: usize = 4;
 /// linker correctness (inline asm "i" constraints, undefined symbols).
 ///
 /// Set to 200 to keep stack frames from always_inline inlining under ~2KB.
-/// CCC allocates ~8 bytes per SSA value, so 200 instructions add ~1.6KB to
+/// Ferric-CC allocates ~8 bytes per SSA value, so 200 instructions add ~1.6KB to
 /// the stack frame. Combined with the base function's frame, this typically
 /// keeps total frame size under ~2KB, leaving headroom in the kernel's 16KB
 /// stack for deep call chains (e.g., mm/page_alloc.c has 10+ levels).
@@ -157,7 +157,7 @@ const MAX_ALWAYS_INLINE_SECOND_PASS_ROUNDS: usize = 300;
 /// can create functions with 1000+ instructions and 3KB+ stack frames that
 /// overflow the kernel's 16KB stack when combined with deep call chains).
 /// GCC can tolerate larger functions because its register allocator keeps most
-/// values in registers; CCC's codegen spills every SSA value to the stack
+/// values in registers; Ferric-CC's codegen spills every SSA value to the stack
 /// (~8 bytes each), so we must be more conservative.
 const MAX_CALLER_INSTRUCTIONS_HARD_CAP: usize = 500;
 
@@ -167,7 +167,7 @@ const MAX_CALLER_INSTRUCTIONS_HARD_CAP: usize = 500;
 ///
 /// This prevents catastrophic stack frame bloat in functions like the kernel's
 /// shrink_folio_list (mm/vmscan.c), which calls hundreds of small inline
-/// helpers. CCC's accumulator-based codegen creates one stack slot per SSA value,
+/// helpers. Ferric-CC's accumulator-based codegen creates one stack slot per SSA value,
 /// so inlining many calls can produce thousands of multi-block values
 /// with wide liveness intervals, creating 16KB+ stack frames that overflow the
 /// kernel's 16KB stack.
@@ -324,8 +324,8 @@ fn select_inline_site(
 /// Returns the number of call sites inlined.
 pub fn run(module: &mut IrModule) -> usize {
     let mut total_inlined = 0;
-    let debug_inline = std::env::var("CCC_INLINE_DEBUG").is_ok();
-    let skip_list: Vec<String> = std::env::var("CCC_INLINE_SKIP")
+    let debug_inline = std::env::var("FCC_INLINE_DEBUG").is_ok();
+    let skip_list: Vec<String> = std::env::var("FCC_INLINE_SKIP")
         .unwrap_or_default()
         .split(',')
         .filter(|s| !s.is_empty())
@@ -402,7 +402,7 @@ pub fn run(module: &mut IrModule) -> usize {
         let max_rounds = 200;
         for _round in 0..max_rounds {
             // Check if the caller has grown too large for further normal inlining.
-            // Each SSA value in CCC gets an 8-byte stack slot, so functions with
+            // Each SSA value in Ferric-CC gets an 8-byte stack slot, so functions with
             // too many instructions will have massive stack frames. Stop normal
             // inlining once the caller exceeds the threshold; always_inline
             // callees are still inlined (required by C semantics).
@@ -466,10 +466,10 @@ pub fn run(module: &mut IrModule) -> usize {
                         site.callee_name, module.functions[func_idx].name
                     );
                 }
-                if std::env::var("CCC_INLINE_VALIDATE").is_ok() {
+                if std::env::var("FCC_INLINE_VALIDATE").is_ok() {
                     validate_function_values(&module.functions[func_idx], &site.callee_name);
                 }
-                if std::env::var("CCC_INLINE_DUMP_IR").is_ok() {
+                if std::env::var("FCC_INLINE_DUMP_IR").is_ok() {
                     dump_function_ir(
                         &module.functions[func_idx],
                         &format!(
@@ -591,10 +591,10 @@ pub fn run(module: &mut IrModule) -> usize {
                             site.callee_name, module.functions[func_idx].name
                         );
                     }
-                    if std::env::var("CCC_INLINE_VALIDATE").is_ok() {
+                    if std::env::var("FCC_INLINE_VALIDATE").is_ok() {
                         validate_function_values(&module.functions[func_idx], &site.callee_name);
                     }
-                    if std::env::var("CCC_INLINE_DUMP_IR").is_ok() {
+                    if std::env::var("FCC_INLINE_DUMP_IR").is_ok() {
                         dump_function_ir(
                             &module.functions[func_idx],
                             &format!(
@@ -677,7 +677,7 @@ fn resolve_inline_asm_symbols(func: &mut IrFunction) {
     };
 
     // Now scan all blocks for InlineAsm instructions and fix up input_symbols
-    let debug_resolve = std::env::var("CCC_INLINE_DEBUG").is_ok();
+    let debug_resolve = std::env::var("FCC_INLINE_DEBUG").is_ok();
     for block in func.blocks.iter_mut() {
         for inst in block.instructions.iter_mut() {
             if let Instruction::InlineAsm {
@@ -1113,7 +1113,7 @@ fn func_has_static_locals_with_label_refs(module: &IrModule, func_name: &str) ->
 fn build_callee_map(module: &IrModule) -> HashMap<String, CalleeData> {
     let mut map = HashMap::new();
 
-    let debug_callee = std::env::var("CCC_INLINE_DEBUG").is_ok();
+    let debug_callee = std::env::var("FCC_INLINE_DEBUG").is_ok();
     for func in &module.functions {
         if func.is_declaration {
             continue;
@@ -1318,7 +1318,7 @@ fn find_inline_call_sites(
                 if let Some(callee_data) = callee_map.get(callee_name) {
                     // Don't inline recursive calls
                     if callee_name != &func.name {
-                        // Skip functions listed in CCC_INLINE_SKIP
+                        // Skip functions listed in FCC_INLINE_SKIP
                         if skip_list.iter().any(|s| s == callee_name) {
                             continue;
                         }
@@ -1365,7 +1365,7 @@ fn inline_call_site(
     let value_offset = caller_next_value;
     let block_offset = *global_max_block_id + 1;
 
-    let debug_inline_detail = std::env::var("CCC_INLINE_DEBUG_DETAIL").is_ok();
+    let debug_inline_detail = std::env::var("FCC_INLINE_DEBUG_DETAIL").is_ok();
     if debug_inline_detail {
         eprintln!("[INLINE_DETAIL] Inlining '{}' into '{}': value_offset={}, block_offset={}, callee.next_value_id={}, caller.next_value_id={}",
             site.callee_name, caller.name, value_offset, block_offset, callee.next_value_id, caller.next_value_id);

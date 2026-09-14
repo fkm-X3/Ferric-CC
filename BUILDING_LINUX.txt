@@ -8,8 +8,8 @@ xz -d linux-6.9.tar.xz
 tar -xf linux-6.9.tar
 cd linux-6.9/
 
-make ARCH=riscv CC=/workspace/code/target/release/ccc-riscv HOSTCC=/workspace/code/target/release/ccc-x86 CROSS_COMPILE=riscv64-linux-gnu- defconfig
-make ARCH=riscv CC=/workspace/code/target/release/ccc-riscv HOSTCC=/workspace/code/target/release/ccc-x86 CROSS_COMPILE=riscv64-linux-gnu- -j$(nproc) Image
+make ARCH=riscv CC=/workspace/code/target/release/ferric-cc-riscv HOSTCC=/workspace/code/target/release/ferric-cc-x86 CROSS_COMPILE=riscv64-linux-gnu- defconfig
+make ARCH=riscv CC=/workspace/code/target/release/ferric-cc-riscv HOSTCC=/workspace/code/target/release/ferric-cc-x86 CROSS_COMPILE=riscv64-linux-gnu- -j$(nproc) Image
 
 # 4. Create the init script
 cat > basic-init <<'EOF'
@@ -69,4 +69,4 @@ qemu-system-riscv64 -M virt -m 512 \
     -no-reboot
 
 # dmesg | head -n 1
-[    0.000000] Linux version 6.9.0 (appuser@3e854e88ac71) (ccc (Claude's C Compiler, GCC-compatible) 14.2.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #1 SMP Thu Feb  5 16:59:16 UTC 2026
+[    0.000000] Linux version 6.9.0 (appuser@3e854e88ac71) (ferric-cc (Ferric-CC, GCC-compatible) 14.2.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #1 SMP Thu Feb  5 16:59:16 UTC 2026

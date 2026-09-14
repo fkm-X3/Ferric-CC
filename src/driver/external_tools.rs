@@ -138,7 +138,7 @@ impl Driver {
         {
             // Handle -Wa,--version: print GNU-compatible version string
             if self.assembler_extra_args.iter().any(|a| a == "--version") {
-                println!("GNU assembler (Claude's C Compiler built-in) 2.42");
+                println!("GNU assembler (Ferric-CC built-in) 2.42");
                 return Ok(());
             }
             self.assemble_source_file_builtin(input_file, output_path)
@@ -276,7 +276,7 @@ impl Driver {
         };
 
         // Debug: dump preprocessed assembly to /tmp/asm_debug_<basename>.s
-        if std::env::var("CCC_ASM_DEBUG").is_ok() {
+        if std::env::var("FCC_ASM_DEBUG").is_ok() {
             let basename = std::path::Path::new(input_file)
                 .file_stem()
                 .and_then(|s| s.to_str())

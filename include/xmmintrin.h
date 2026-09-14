@@ -1,4 +1,4 @@
-/* CCC compiler bundled xmmintrin.h - SSE intrinsics */
+/* Ferric-CC compiler bundled xmmintrin.h - SSE intrinsics */
 #ifndef _XMMINTRIN_H_INCLUDED
 #define _XMMINTRIN_H_INCLUDED
 

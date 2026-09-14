@@ -1,4 +1,4 @@
-/* CCC compiler bundled tmmintrin.h - SSSE3 intrinsics */
+/* Ferric-CC compiler bundled tmmintrin.h - SSSE3 intrinsics */
 #ifndef _TMMINTRIN_H_INCLUDED
 #define _TMMINTRIN_H_INCLUDED
 

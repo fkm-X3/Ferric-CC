@@ -1,4 +1,4 @@
-/* CCC compiler bundled avxintrin.h - AVX intrinsics */
+/* Ferric-CC compiler bundled avxintrin.h - AVX intrinsics */
 #ifndef _AVXINTRIN_H_INCLUDED
 #define _AVXINTRIN_H_INCLUDED
 

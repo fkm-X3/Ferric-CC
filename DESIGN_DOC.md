@@ -1,7 +1,7 @@
-# CCC Design Document
+# Ferric-CC Design Document
 
-This document describes the architecture and implementation of CCC
-(Claude's C Compiler). For building, usage, and status information, see
+This document describes the architecture and implementation of Ferric-CC
+(forked from Claude's C Compiler). For building, usage, and status information, see
 [README.md](README.md). Each `src/` subdirectory also has its own
 `README.md` with detailed per-module documentation.
 

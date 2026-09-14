@@ -1,4 +1,4 @@
-/* CCC compiler bundled x86intrin.h - x86 intrinsics umbrella header */
+/* Ferric-CC compiler bundled x86intrin.h - x86 intrinsics umbrella header */
 #ifndef _X86INTRIN_H_INCLUDED
 #define _X86INTRIN_H_INCLUDED
 

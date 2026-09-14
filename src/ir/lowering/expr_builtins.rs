@@ -39,7 +39,7 @@ impl Lowerer {
         // emmintrin.h headers are defined as static inline functions whose bodies
         // reference __builtin_ia32_vec_init_* (Nop stubs). The builtin intercept
         // MUST take priority for these, otherwise the Nop stubs return 0 and the
-        // __CCC_M128I_FROM_BUILTIN macro dereferences NULL.
+        // __FCC_M128I_FROM_BUILTIN macro dereferences NULL.
         if let Some(func_info) = self.sema_functions.get(name) {
             if func_info.is_defined {
                 // Don't let is_defined bypass SSE/SIMD intrinsics -- those wrapper

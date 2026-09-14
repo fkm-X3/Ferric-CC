@@ -1071,10 +1071,10 @@ impl Lexer {
     }
 
     /// Recognize synthetic pragma pack identifiers emitted by the preprocessor.
-    /// Format: __ccc_pack_set_N, __ccc_pack_push_N, __ccc_pack_push_only,
-    ///         __ccc_pack_pop, __ccc_pack_reset
+    /// Format: __fcc_pack_set_N, __fcc_pack_push_N, __fcc_pack_push_only,
+    ///         __fcc_pack_pop, __fcc_pack_reset
     fn try_pragma_pack_token(text: &str) -> Option<TokenKind> {
-        if let Some(rest) = text.strip_prefix("__ccc_pack_") {
+        if let Some(rest) = text.strip_prefix("__fcc_pack_") {
             if rest == "pop" {
                 Some(TokenKind::PragmaPackPop)
             } else if rest == "reset" {
@@ -1102,9 +1102,9 @@ impl Lexer {
     }
 
     /// Recognize synthetic pragma visibility identifiers emitted by the preprocessor.
-    /// Format: __ccc_visibility_push_VISIBILITY, __ccc_visibility_pop
+    /// Format: __fcc_visibility_push_VISIBILITY, __fcc_visibility_pop
     fn try_pragma_visibility_token(text: &str) -> Option<TokenKind> {
-        if let Some(rest) = text.strip_prefix("__ccc_visibility_") {
+        if let Some(rest) = text.strip_prefix("__fcc_visibility_") {
             if rest == "pop" {
                 Some(TokenKind::PragmaVisibilityPop)
             } else if let Some(vis) = rest.strip_prefix("push_") {

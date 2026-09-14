@@ -76,7 +76,7 @@ fn promote_function(func: &mut IrFunction, promote_params: bool) {
 
     // Step 1: Identify promotable allocas
     let mut alloca_infos = find_promotable_allocas(func, promote_params);
-    if std::env::var("CCC_DEBUG_MEM2REG").is_ok() {
+    if std::env::var("FCC_DEBUG_MEM2REG").is_ok() {
         let total_allocas: usize = func.blocks[0]
             .instructions
             .iter()

@@ -300,7 +300,7 @@ fn run_inline_phase(module: &mut IrModule, disabled: &str) {
 /// select between a noreturn function call and a no-op). The actual pass pipeline
 /// is unaffected by these flags.
 pub(crate) fn run_passes(module: &mut IrModule, _opt_level: u32, target: crate::backend::Target) {
-    let disabled = std::env::var("CCC_DISABLE_PASSES").unwrap_or_default();
+    let disabled = std::env::var("FCC_DISABLE_PASSES").unwrap_or_default();
     if disabled.contains("all") {
         return;
     }
@@ -316,7 +316,7 @@ pub(crate) fn run_passes(module: &mut IrModule, _opt_level: u32, target: crate::
     // `changed` accumulates which functions were modified during each iteration.
     let mut changed = vec![false; num_funcs];
 
-    let time_passes = std::env::var("CCC_TIME_PASSES").is_ok();
+    let time_passes = std::env::var("FCC_TIME_PASSES").is_ok();
 
     // Per-pass change counts from the previous iteration, used for skip decisions.
     // Pass indices: 0=cfg1, 1=copyprop1, 2=narrow, 3=simplify, 4=constfold,
