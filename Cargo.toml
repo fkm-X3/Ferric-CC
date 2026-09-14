@@ -1,5 +1,5 @@
 [package]
-name = "fcc"
+name = "ccc"
 version = "0.0.0" # Not ready, therefore 0.0.0 not 0.1.0
 edition = "2021"
 description = "Ferric-CC, a C compiler targeting x86-64, i686, ARM64, and RISC-V"
