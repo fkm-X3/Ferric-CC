@@ -868,7 +868,7 @@ Individual passes can be disabled at runtime for debugging by setting the
 names:
 
 ```
-FCC_DISABLE_PASSES=gvn,licm ./ferric-cc input.c -o output.o
+FCC_DISABLE_PASSES=gvn,licm ./fcc input.c -o output.o
 ```
 
 Recognized names: `all`, `inline`, `cfg`, `copyprop`, `narrow`, `simplify`,
@@ -879,7 +879,7 @@ Setting the variable to `all` skips the entire optimization pipeline.
 Pass timing information can be enabled with:
 
 ```
-FCC_TIME_PASSES=1 ./ferric-cc input.c -o output.o
+FCC_TIME_PASSES=1 ./fcc input.c -o output.o
 ```
 
 This prints per-pass, per-function timing and change counts to stderr, which is

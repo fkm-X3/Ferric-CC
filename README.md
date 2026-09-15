@@ -30,11 +30,11 @@ source. The target architecture is selected by the binary name at runtime:
 
 | Binary | Target |
 |--------|--------|
-| `ferric-cc` | x86-64 (default) |
-| `ferric-cc-x86` | x86-64 |
-| `ferric-cc-arm` | AArch64 |
-| `ferric-cc-riscv` | RISC-V 64 |
-| `ferric-cc-i686` | i686 (32-bit x86) |
+| `fcc` | x86-64 (default) |
+| `fcc-x86` | x86-64 |
+| `fcc-arm` | AArch64 |
+| `fcc-riscv` | RISC-V 64 |
+| `fcc-i686` | i686 (32-bit x86) |
 
 ## Quick Start
 
@@ -51,11 +51,11 @@ int main(void) {
 EOF
 
 # Compile and run (x86-64)
-./target/release/ferric-cc -o hello hello.c
+./target/release/fcc -o hello hello.c
 ./hello
 
 # Cross-compile for AArch64 and run under QEMU
-./target/release/ferric-cc-arm -o hello-arm hello.c
+./target/release/fcc-arm -o hello-arm hello.c
 qemu-aarch64 -L /usr/aarch64-linux-gnu ./hello-arm
 ```
 
@@ -63,42 +63,42 @@ Ferric-CC works as a drop-in GCC replacement. Point your build system at it:
 
 ```bash
 # Build a project with make
-make CC=/path/to/ferric-cc-x86
+make CC=/path/to/fcc-x86
 
 # Build a project with CMake
-cmake -DCMAKE_C_COMPILER=/path/to/ferric-cc-x86 ..
+cmake -DCMAKE_C_COMPILER=/path/to/fcc-x86 ..
 
 # Build a project with configure scripts
-./configure CC=/path/to/ferric-cc-x86
+./configure CC=/path/to/fcc-x86
 ```
 
 ## Usage
 
 ```bash
 # Compile and link
-ferric-cc -o output input.c                # x86-64
-ferric-cc-arm -o output input.c            # AArch64
-ferric-cc-riscv -o output input.c          # RISC-V 64
-ferric-cc-i686 -o output input.c           # i686
+fcc -o output input.c                # x86-64
+fcc-arm -o output input.c            # AArch64
+fcc-riscv -o output input.c          # RISC-V 64
+fcc-i686 -o output input.c           # i686
 
 # GCC-compatible flags
-ferric-cc -S input.c                       # Emit assembly
-ferric-cc -c input.c                       # Compile to object file
-ferric-cc -E input.c                       # Preprocess only
-ferric-cc -O2 -o output input.c            # Optimize (accepts -O0 through -O3, -Os, -Oz)
-ferric-cc -g -o output input.c             # DWARF debug info
-ferric-cc -DFOO=1 -Iinclude/ input.c       # Define macros, add include paths
-ferric-cc -Werror -Wall input.c            # Warning control
-ferric-cc -fPIC -shared -o lib.so lib.c    # Position-independent code
-ferric-cc -x c -E -                        # Read from stdin
+fcc -S input.c                       # Emit assembly
+fcc -c input.c                       # Compile to object file
+fcc -E input.c                       # Preprocess only
+fcc -O2 -o output input.c            # Optimize (accepts -O0 through -O3, -Os, -Oz)
+fcc -g -o output input.c             # DWARF debug info
+fcc -DFOO=1 -Iinclude/ input.c       # Define macros, add include paths
+fcc -Werror -Wall input.c            # Warning control
+fcc -fPIC -shared -o lib.so lib.c    # Position-independent code
+fcc -x c -E -                        # Read from stdin
 
 # Build system integration (reports as GCC 14.2.0 for compatibility)
-ferric-cc -dumpmachine   # x86_64-linux-gnu / aarch64-linux-gnu / riscv64-linux-gnu / i686-linux-gnu
-ferric-cc -dumpversion   # 14
+fcc -dumpmachine   # x86_64-linux-gnu / aarch64-linux-gnu / riscv64-linux-gnu / i686-linux-gnu
+fcc -dumpversion   # 14
 ```
 
 The compiler accepts most GCC flags. Unrecognized flags (e.g., architecture-
-specific `-m` flags, unknown `-f` flags) are silently ignored so `ferric-cc` can
+specific `-m` flags, unknown `-f` flags) are silently ignored so `fcc` can
 serve as a drop-in GCC replacement in build systems.
 
 ### Assembler and Linker Modes
@@ -175,7 +175,7 @@ tests/
     expected.skip.arm   # Skip marker for specific architectures (optional)
 ```
 
-Tests are run by compiling `main.c` with `ferric-cc`, executing the resulting binary,
+Tests are run by compiling `main.c` with `fcc`, executing the resulting binary,
 and comparing stdout and the exit code against the expected files.
 
 ## Environment Variables

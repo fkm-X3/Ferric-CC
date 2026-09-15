@@ -1222,13 +1222,13 @@ file next to the output for debugging.
 ```bash
 # Default build: builtin assembler and linker (fully self-contained)
 cargo build --release
-./target/release/ferric-cc -o output input.c
+./target/release/fcc -o output input.c
 
 # Build with GCC assembler and linker fallback
 cargo build --release --features gcc_assembler,gcc_linker
 
 # Static linking with builtin linker
-ferric-cc -static file.c -o file
+fcc -static file.c -o file
 ```
 
 ---

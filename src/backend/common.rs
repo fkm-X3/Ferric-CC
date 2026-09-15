@@ -103,7 +103,7 @@ pub fn assemble_with_extra(
             .file_stem()
             .and_then(|s| s.to_str())
             .unwrap_or("asm");
-        TempFile::new("ferric-cc-asm", stem, "s")
+        TempFile::new("fcc-asm", stem, "s")
     };
     std::fs::write(asm_file.path(), asm_text)
         .map_err(|e| format!("Failed to write assembly: {}", e))?;

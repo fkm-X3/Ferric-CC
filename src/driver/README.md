@@ -225,7 +225,7 @@ The driver reports as GCC 14.2.0 for build system compatibility:
 |-------|----------|
 | `-dumpmachine` | Target triple (e.g., `x86_64-linux-gnu`) |
 | `-dumpversion` | `14` |
-| `--version` | `ferric-cc (Ferric-CC, GCC-compatible) 14.2.0` + FSF copyright + backend mode |
+| `--version` | `fcc (Ferric-CC, GCC-compatible) 14.2.0` + FSF copyright + backend mode |
 | `-v` (alone) | Target and version info |
 | `-print-search-dirs` | Standard library directory layout |
 | `-print-file-name=NAME` | Searches standard GCC library paths; returns bundled include dir for `include` |

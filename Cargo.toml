@@ -6,24 +6,24 @@ description = "Ferric-CC, a C compiler targeting x86-64, i686, ARM64, and RISC-V
 autobins = false
 
 [[bin]]
-name = "ferric-cc"
+name = "fcc"
 path = "src/main.rs"
 
 [[bin]]
-name = "ferric-cc-x86"
-path = "src/bin/ferric_cc_x86.rs"
+name = "fcc-x86"
+path = "src/bin/fcc_x86.rs"
 
 [[bin]]
-name = "ferric-cc-arm"
-path = "src/bin/ferric_cc_arm.rs"
+name = "fcc-arm"
+path = "src/bin/fcc_arm.rs"
 
 [[bin]]
-name = "ferric-cc-riscv"
-path = "src/bin/ferric_cc_riscv.rs"
+name = "fcc-riscv"
+path = "src/bin/fcc_riscv.rs"
 
 [[bin]]
-name = "ferric-cc-i686"
-path = "src/bin/ferric_cc_i686.rs"
+name = "fcc-i686"
+path = "src/bin/fcc_i686.rs"
 
 [features]
 # Allow GCC as a linker fallback. When enabled and GCC is used, a warning is printed.

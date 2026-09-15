@@ -23,7 +23,7 @@ impl Driver {
         let binary_name = std::path::Path::new(&args[0])
             .file_name()
             .and_then(|n| n.to_str())
-            .unwrap_or("ferric-cc");
+            .unwrap_or("fcc");
 
         self.target = if binary_name.contains("arm") || binary_name.contains("aarch64") {
             Target::Aarch64
@@ -93,7 +93,7 @@ impl Driver {
                     // Meson detects GCC by checking for "Free Software Foundation"
                     // in the --version output. We claim GCC 14.2.0 compatibility
                     // (matching our __GNUC__/__GNUC_MINOR__/__GNUC_PATCHLEVEL__).
-                    println!("ferric-cc (Ferric-CC, GCC-compatible) 14.2.0");
+                    println!("fcc (Ferric-CC, GCC-compatible) 14.2.0");
                     println!("GCC is maintained by the Free Software Foundation, Inc.");
                     println!("This program was written by Claude Opus 4.6;");
                     println!("It is not intended for production use.");
@@ -116,7 +116,7 @@ impl Driver {
                     return Ok(true);
                 }
                 "-v" if args.len() == 2 => {
-                    println!("ferric-cc (Ferric-CC, GCC-compatible) 14.2.0");
+                    println!("fcc (Ferric-CC, GCC-compatible) 14.2.0");
                     println!("Target: {}", target.triple());
                     return Ok(true);
                 }
@@ -462,7 +462,7 @@ impl Driver {
                 }
                 "-m32" => {
                     // Switch to 32-bit i686 target. If already targeting i686
-                    // (e.g. invoked as ferric-cc-i686), this is a no-op.
+                    // (e.g. invoked as fcc-i686), this is a no-op.
                     if self.target != Target::I686 {
                         self.target = Target::I686;
                     }
@@ -522,8 +522,8 @@ impl Driver {
                 }
                 "-mlittle-endian" => {
                     // ARM64 target indicator: only arm64-gcc accepts -mlittle-endian.
-                    // This allows `ferric-cc -mlittle-endian` to build ARM code without
-                    // requiring the binary to be named aarch64-linux-gnu-ferric-cc.
+                    // This allows `fcc -mlittle-endian` to build ARM code without
+                    // requiring the binary to be named aarch64-linux-gnu-fcc.
                     if self.target == Target::X86_64 {
                         self.target = Target::Aarch64;
                     }
