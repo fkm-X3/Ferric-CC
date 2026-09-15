@@ -150,7 +150,7 @@ impl RiscvCodegen {
                     CallArgClass::F128Stack => {
                         offset = (offset + 15) & !15;
                         match arg {
-                            Operand::Const(ref c) => {
+                            Operand::Const(c) => {
                                 let bytes = match c {
                                     IrConst::LongDouble(_, f128_bytes) => *f128_bytes,
                                     _ => {
@@ -301,7 +301,7 @@ impl RiscvCodegen {
         for (i, arg) in args.iter().enumerate() {
             if let CallArgClass::F128Reg { reg_idx: base_reg } = arg_classes[i] {
                 match arg {
-                    Operand::Const(ref c) => {
+                    Operand::Const(c) => {
                         let bytes = match c {
                             IrConst::LongDouble(_, f128_bytes) => *f128_bytes,
                             _ => {

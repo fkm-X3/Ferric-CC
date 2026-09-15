@@ -295,7 +295,7 @@ impl Parser {
                         break;
                     }
                 }
-                TokenKind::Identifier(ref name)
+                TokenKind::Identifier(name)
                     if self.typedefs.contains(name) && !self.shadowed_typedefs.contains(name) =>
                 {
                     if !any_base_specifier {
@@ -585,7 +585,7 @@ impl Parser {
             self.parse_enum_specifier()
         } else if has_typeof {
             self.parse_typeof_specifier()
-        } else if let Some(ref name) = typedef_name {
+        } else if let Some(name) = typedef_name {
             TypeSpecifier::TypedefName(name.clone())
         } else if has_char {
             if has_unsigned {
@@ -661,8 +661,8 @@ impl Parser {
         // Record alignment for named struct/union definitions so that later
         // tag-only references (e.g., __alignof__(struct foo)) can look it up.
         match &ts {
-            TypeSpecifier::Struct(Some(ref tag), Some(_), ..)
-            | TypeSpecifier::Union(Some(ref tag), Some(_), ..) => {
+            TypeSpecifier::Struct(Some(tag), Some(_), ..)
+            | TypeSpecifier::Union(Some(tag), Some(_), ..) => {
                 let align = Self::alignof_type_spec(&ts, None);
                 self.struct_tag_alignments.insert(tag.clone(), align);
             }

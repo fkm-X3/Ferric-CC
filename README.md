@@ -11,7 +11,7 @@ Ferric-CC produces ELF executables without any external toolchain.
 
 ## Prerequisites
 
-- **Rust** (stable, 2021 edition) — install via [rustup](https://rustup.rs/)
+- **Rust** (stable, 2024 edition) — install via [rustup](https://rustup.rs/)
 - **Linux host** — the compiler targets Linux ELF executables and relies on
   Linux system headers / C runtime libraries (glibc or musl) being installed
   on the host

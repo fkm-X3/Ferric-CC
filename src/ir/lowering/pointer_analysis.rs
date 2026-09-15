@@ -149,7 +149,7 @@ impl Lowerer {
                 }
                 false
             }
-            Expr::Cast(ref type_spec, _, _) => {
+            Expr::Cast(type_spec, _, _) => {
                 match type_spec {
                     TypeSpecifier::Pointer(_, _) => true,
                     // Resolve typedef names to check if the resolved type is a pointer
@@ -368,8 +368,8 @@ impl Lowerer {
                 // struct/union types (since they map to IrType::Ptr in the IR).
                 self.sizeof_expr(inner).max(1)
             }
-            Expr::Cast(ref type_spec, _, _) => {
-                if let TypeSpecifier::Pointer(ref inner, _) = type_spec {
+            Expr::Cast(type_spec, _, _) => {
+                if let TypeSpecifier::Pointer(inner, _) = type_spec {
                     self.sizeof_type(inner)
                 } else {
                     // Resolve typedef names (e.g., typedef struct Foo *FooPtr)
@@ -433,8 +433,8 @@ impl Lowerer {
                 }
                 self.get_pointee_type_of_expr(rhs)
             }
-            Expr::Cast(ref type_spec, inner, _) => {
-                if let TypeSpecifier::Pointer(ref pointee_ts, _) = type_spec {
+            Expr::Cast(type_spec, inner, _) => {
+                if let TypeSpecifier::Pointer(pointee_ts, _) = type_spec {
                     let pt = self.type_spec_to_ir(pointee_ts);
                     return Some(pt);
                 }

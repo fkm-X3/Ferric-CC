@@ -283,7 +283,7 @@ impl CodegenState {
     /// Emit a visibility directive (.hidden, .protected, .internal) if the symbol
     /// has non-default visibility. No-op if `visibility` is None or "default".
     pub fn emit_visibility(&mut self, name: &str, visibility: &Option<String>) {
-        if let Some(ref vis) = visibility {
+        if let Some(vis) = visibility {
             match vis.as_str() {
                 "hidden" => self.emit_fmt(format_args!(".hidden {}", name)),
                 "protected" => self.emit_fmt(format_args!(".protected {}", name)),

@@ -1798,7 +1798,7 @@ impl CType {
                     return Some(CType::Void);
                 }
                 // Both pointers: C11 6.5.15p6 rules
-                if let (CType::Pointer(ref inner_t, _), CType::Pointer(ref inner_e, _)) = (&t, &e) {
+                if let (CType::Pointer(inner_t, _), CType::Pointer(inner_e, _)) = (&t, &e) {
                     let t_is_void = matches!(inner_t.as_ref(), CType::Void);
                     let e_is_void = matches!(inner_e.as_ref(), CType::Void);
                     if t_is_void && !e_is_void {

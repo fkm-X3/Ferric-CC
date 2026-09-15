@@ -1420,7 +1420,7 @@ fn generate_instruction(
             dest_ptr,
             va_list_ptr,
             size,
-            ref eightbyte_classes,
+            eightbyte_classes,
         } => {
             cg.emit_va_arg_struct_ex(dest_ptr, va_list_ptr, *size, eightbyte_classes);
             cg.state().reg_cache.invalidate_all();

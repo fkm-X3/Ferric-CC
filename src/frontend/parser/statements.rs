@@ -357,7 +357,7 @@ impl Parser {
 
     fn parse_asm_string(&mut self) -> String {
         let mut result = String::new();
-        while let TokenKind::StringLiteral(ref s) = self.peek() {
+        while let TokenKind::StringLiteral(s) = self.peek() {
             result.push_str(s);
             self.advance();
         }
@@ -384,7 +384,7 @@ impl Parser {
         let name = if matches!(self.peek(), TokenKind::LBracket) {
             let open = self.peek_span();
             self.advance();
-            let n = if let TokenKind::Identifier(ref id) = self.peek() {
+            let n = if let TokenKind::Identifier(id) = self.peek() {
                 let id = id.clone();
                 self.advance();
                 Some(id)
@@ -398,10 +398,10 @@ impl Parser {
         };
 
         // Constraint string (may be concatenated)
-        let constraint = if let TokenKind::StringLiteral(ref s) = self.peek() {
+        let constraint = if let TokenKind::StringLiteral(s) = self.peek() {
             let mut full = s.clone();
             self.advance();
-            while let TokenKind::StringLiteral(ref s2) = self.peek() {
+            while let TokenKind::StringLiteral(s2) = self.peek() {
                 full.push_str(s2);
                 self.advance();
             }
@@ -428,7 +428,7 @@ impl Parser {
         if matches!(self.peek(), TokenKind::Colon | TokenKind::RParen) {
             return clobbers;
         }
-        while let TokenKind::StringLiteral(ref s) = self.peek() {
+        while let TokenKind::StringLiteral(s) = self.peek() {
             clobbers.push(s.clone());
             self.advance();
             if !self.consume_if(&TokenKind::Comma) {
@@ -445,7 +445,7 @@ impl Parser {
         if matches!(self.peek(), TokenKind::RParen) {
             return labels;
         }
-        while let TokenKind::Identifier(ref name) = self.peek() {
+        while let TokenKind::Identifier(name) = self.peek() {
             labels.push(name.clone());
             self.advance();
             if !self.consume_if(&TokenKind::Comma) {

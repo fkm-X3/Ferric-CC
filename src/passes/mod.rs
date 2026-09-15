@@ -336,7 +336,7 @@ pub(crate) fn run_passes(module: &mut IrModule, _opt_level: u32, target: crate::
         changed.iter_mut().for_each(|c| *c = false);
 
         macro_rules! timed_pass {
-            ($name:expr, $body:expr) => {{
+            ($name:expr_2021, $body:expr_2021) => {{
                 if time_passes {
                     let t0 = std::time::Instant::now();
                     let n = $body;
@@ -367,7 +367,7 @@ pub(crate) fn run_passes(module: &mut IrModule, _opt_level: u32, target: crate::
         //   if_convert → copy_prop, dce (eliminated branches)
         //   dce → cfg_simplify (empty blocks)
         macro_rules! should_run {
-            ($self_idx:expr, $($upstream:expr),*) => {{
+            ($self_idx:expr_2021, $($upstream:expr_2021),*) => {{
                 prev_pass_changes[$self_idx] > 0 $(|| prev_pass_changes[$upstream] > 0)*
             }};
         }

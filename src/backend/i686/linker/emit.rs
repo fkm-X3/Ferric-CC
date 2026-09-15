@@ -976,7 +976,7 @@ pub(super) fn emit_executable(
         }
     }
     // Text relocations for WEAK dynamic data symbols (R_386_32)
-    for (addr, ref name) in &text_relocs {
+    for (addr, name) in &text_relocs {
         if let Some(&dynsym_idx) = dynsym_map.get(name) {
             let r_info = ((dynsym_idx as u32) << 8) | R_386_32;
             rel_dyn_data.extend_from_slice(&addr.to_le_bytes());

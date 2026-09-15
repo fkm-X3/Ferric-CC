@@ -89,13 +89,13 @@ impl BitSet {
     /// Computes: self = gen ∪ (out - kill) in one pass. Returns true if self changed.
     fn assign_gen_union_out_minus_kill(
         &mut self,
-        gen: &BitSet,
+        r#gen: &BitSet,
         out: &BitSet,
         kill: &BitSet,
     ) -> bool {
         let mut changed = false;
         for i in 0..self.words.len() {
-            let new_val = gen.words[i] | (out.words[i] & !kill.words[i]);
+            let new_val = r#gen.words[i] | (out.words[i] & !kill.words[i]);
             if new_val != self.words[i] {
                 self.words[i] = new_val;
                 changed = true;
@@ -325,7 +325,7 @@ fn assign_program_points(
         block_id_to_idx.insert(block.label.0, block_idx);
         let block_start = point;
         block_start_points.push(block_start);
-        let mut gen = BitSet::new(num_values);
+        let mut r#gen = BitSet::new(num_values);
         let mut kill = BitSet::new(num_values);
 
         for inst in &block.instructions {
@@ -428,7 +428,7 @@ fn assign_program_points(
                 }
             }
 
-            collect_instruction_gen_dense(inst, alloca_set, id_to_dense, &kill, &mut gen);
+            collect_instruction_gen_dense(inst, alloca_set, id_to_dense, &kill, &mut r#gen);
 
             if let Some(dest) = inst.dest() {
                 if !alloca_set.contains(&dest.0) {
@@ -451,12 +451,12 @@ fn assign_program_points(
             id_to_dense,
             &mut last_use_points,
         );
-        collect_terminator_gen_dense(&block.terminator, alloca_set, id_to_dense, &kill, &mut gen);
+        collect_terminator_gen_dense(&block.terminator, alloca_set, id_to_dense, &kill, &mut r#gen);
         let block_end = point;
         block_end_points.push(block_end);
         point += 1;
 
-        block_gen.push(gen);
+        block_gen.push(r#gen);
         block_kill.push(kill);
     }
 
@@ -942,13 +942,13 @@ fn collect_instruction_gen_dense(
     alloca_set: &FxHashSet<u32>,
     id_to_dense: &FxHashMap<u32, usize>,
     kill: &BitSet,
-    gen: &mut BitSet,
+    r#gen: &mut BitSet,
 ) {
     let mut add_use = |vid: u32| {
         if !alloca_set.contains(&vid) {
             if let Some(&dense) = id_to_dense.get(&vid) {
                 if !kill.contains(dense) {
-                    gen.insert(dense);
+                    r#gen.insert(dense);
                 }
             }
         }
@@ -971,14 +971,14 @@ fn collect_terminator_gen_dense(
     alloca_set: &FxHashSet<u32>,
     id_to_dense: &FxHashMap<u32, usize>,
     kill: &BitSet,
-    gen: &mut BitSet,
+    r#gen: &mut BitSet,
 ) {
     for_each_operand_in_terminator(term, |op| {
         if let Operand::Value(v) = op {
             if !alloca_set.contains(&v.0) {
                 if let Some(&dense) = id_to_dense.get(&v.0) {
                     if !kill.contains(dense) {
-                        gen.insert(dense);
+                        r#gen.insert(dense);
                     }
                 }
             }

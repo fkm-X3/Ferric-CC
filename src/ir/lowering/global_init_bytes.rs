@@ -346,7 +346,7 @@ impl Lowerer {
     ) -> Option<usize> {
         if has_field_desig {
             item.designators.iter().find_map(|d| {
-                if let Designator::Index(ref idx_expr) = d {
+                if let Designator::Index(idx_expr) = d {
                     self.eval_const_expr(idx_expr).and_then(|c| c.to_usize())
                 } else {
                     None
@@ -354,7 +354,7 @@ impl Lowerer {
             })
         } else {
             match item.designators.first() {
-                Some(Designator::Index(ref idx_expr)) => {
+                Some(Designator::Index(idx_expr)) => {
                     self.eval_const_expr(idx_expr).and_then(|c| c.to_usize())
                 }
                 _ => None,
@@ -417,7 +417,7 @@ impl Lowerer {
             .iter()
             .enumerate()
             .find_map(|(i, d)| {
-                if let Designator::Index(ref idx_expr) = d {
+                if let Designator::Index(idx_expr) = d {
                     self.eval_const_expr(idx_expr)
                         .and_then(|c| c.to_usize())
                         .map(|v| (i, v))
@@ -478,7 +478,7 @@ impl Lowerer {
                 let inner_idx = remaining_index_desigs
                     .iter()
                     .find_map(|d| {
-                        if let Designator::Index(ref idx_expr) = d {
+                        if let Designator::Index(idx_expr) = d {
                             self.eval_const_expr(idx_expr).and_then(|c| c.to_usize())
                         } else {
                             None
@@ -597,7 +597,7 @@ impl Lowerer {
                         }
                     }
                 }
-                CType::Struct(ref key) | CType::Union(ref key) => {
+                CType::Struct(key) | CType::Union(key) => {
                     if let Some(sub_layout) =
                         self.types.borrow_struct_layouts().get(&**key).cloned()
                     {
@@ -626,7 +626,7 @@ impl Lowerer {
             }
             Initializer::Expr(expr) => {
                 // Unwrap compound literal: (type){ init_list } -> use inner init_list
-                if let Expr::CompoundLiteral(_, ref cl_init, _) = expr {
+                if let Expr::CompoundLiteral(_, cl_init, _) = expr {
                     if let Initializer::List(sub_items) = cl_init.as_ref() {
                         self.fill_struct_global_bytes(sub_items, sub_layout, bytes, field_offset);
                         return 1;
@@ -1122,7 +1122,7 @@ impl Lowerer {
         let mut ai = 0usize;
         while ai < arr_size && sub_idx < sub_items.len() {
             // Handle designated array index initializers (e.g., [3] = { ... })
-            if let Some(Designator::Index(ref idx_expr)) = sub_items[sub_idx].designators.first() {
+            if let Some(Designator::Index(idx_expr)) = sub_items[sub_idx].designators.first() {
                 if let Some(idx) = self.eval_const_expr(idx_expr).and_then(|c| c.to_usize()) {
                     ai = idx;
                 }
@@ -1162,7 +1162,7 @@ impl Lowerer {
     ) {
         let mut ai = 0usize;
         for sub_item in sub_items {
-            if let Some(Designator::Index(ref idx_expr)) = sub_item.designators.first() {
+            if let Some(Designator::Index(idx_expr)) = sub_item.designators.first() {
                 if let Some(idx) = self.eval_const_expr(idx_expr).and_then(|c| c.to_usize()) {
                     ai = idx;
                 }
@@ -1190,7 +1190,7 @@ impl Lowerer {
     ) {
         let mut ai = 0usize;
         for sub_item in sub_items {
-            if let Some(Designator::Index(ref idx_expr)) = sub_item.designators.first() {
+            if let Some(Designator::Index(idx_expr)) = sub_item.designators.first() {
                 if let Some(idx) = self.eval_const_expr(idx_expr).and_then(|c| c.to_usize()) {
                     ai = idx;
                 }
@@ -1362,7 +1362,7 @@ impl Lowerer {
                 .designators
                 .iter()
                 .filter_map(|d| {
-                    if let Designator::Index(ref idx_expr) = d {
+                    if let Designator::Index(idx_expr) = d {
                         self.eval_const_expr(idx_expr).and_then(|c| c.to_usize())
                     } else {
                         None
@@ -1399,7 +1399,7 @@ impl Lowerer {
 
                     // Handle field designator for [i][j].field = val
                     let field_designator_name = item.designators.iter().find_map(|d| {
-                        if let Designator::Field(ref name) = d {
+                        if let Designator::Field(name) = d {
                             Some(name.clone())
                         } else {
                             None
@@ -1491,7 +1491,7 @@ impl Lowerer {
 
             // Check for field designator: [idx].field = val
             let field_designator_name = item.designators.iter().find_map(|d| {
-                if let Designator::Field(ref name) = d {
+                if let Designator::Field(name) = d {
                     Some(name.clone())
                 } else {
                     None
@@ -1615,7 +1615,7 @@ impl Lowerer {
         let mut current_idx = 0usize;
         for item in items {
             // Respect designated array initializer indices (e.g., [3] = 40)
-            if let Some(Designator::Index(ref idx_expr)) = item.designators.first() {
+            if let Some(Designator::Index(idx_expr)) = item.designators.first() {
                 if let Some(idx) = self.eval_const_expr(idx_expr).and_then(|c| c.to_usize()) {
                     current_idx = idx;
                 }

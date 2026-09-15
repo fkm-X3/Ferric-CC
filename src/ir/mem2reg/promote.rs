@@ -533,7 +533,7 @@ fn rename_block(
             // Find which alloca this phi is for
             if let Some(&alloca_idx) = phi_dests[block_idx]
                 .iter()
-                .find(|(_, &v)| v == *dest)
+                .find(|&(_, &v)| v == *dest)
                 .map(|(idx, _)| idx)
             {
                 def_stacks[alloca_idx].push(Operand::Value(*dest));
@@ -716,7 +716,7 @@ fn rename_block(
                     // Find which alloca this phi is for
                     if let Some(&alloca_idx) = phi_dests[succ_idx]
                         .iter()
-                        .find(|(_, &v)| v == *dest)
+                        .find(|&(_, &v)| v == *dest)
                         .map(|(idx, _)| idx)
                     {
                         let current_val = if let Some(snapshot) = goto_snapshot {

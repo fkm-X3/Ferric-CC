@@ -42,7 +42,7 @@ impl Lowerer {
             let item = &items[item_idx];
 
             let desig_name = match item.designators.first() {
-                Some(Designator::Field(ref name)) => Some(name.as_str()),
+                Some(Designator::Field(name)) => Some(name.as_str()),
                 _ => None,
             };
             // Check for array index designator (e.g., .field[idx] or bare [idx])
@@ -203,7 +203,7 @@ impl Lowerer {
                     self.emit_field_complex(item, base_alloca, field_offset, &field.ty);
                     item_idx += 1;
                 }
-                CType::Vector(ref elem_ty, total_size) => {
+                CType::Vector(elem_ty, total_size) => {
                     self.emit_field_vector(
                         item,
                         items,
@@ -243,7 +243,7 @@ impl Lowerer {
     ) -> Option<usize> {
         if has_field_desig {
             item.designators.iter().find_map(|d| {
-                if let Designator::Index(ref idx_expr) = d {
+                if let Designator::Index(idx_expr) = d {
                     self.eval_const_expr_for_designator(idx_expr)
                 } else {
                     None
@@ -251,7 +251,7 @@ impl Lowerer {
             })
         } else {
             match item.designators.first() {
-                Some(Designator::Index(ref idx_expr)) => {
+                Some(Designator::Index(idx_expr)) => {
                     self.eval_const_expr_for_designator(idx_expr)
                 }
                 _ => None,
@@ -312,7 +312,7 @@ impl Lowerer {
             .iter()
             .enumerate()
             .find_map(|(i, d)| {
-                if let Designator::Index(ref idx_expr) = d {
+                if let Designator::Index(idx_expr) = d {
                     self.eval_const_expr(idx_expr)
                         .and_then(|c| c.to_usize())
                         .map(|v| (i, v))
@@ -401,7 +401,7 @@ impl Lowerer {
         elem_offset: usize,
         after_first_idx: &[Designator],
     ) {
-        if let CType::Struct(ref key) | CType::Union(ref key) = elem_ty {
+        if let CType::Struct(key) | CType::Union(key) = elem_ty {
             let sub_layout = self.types.borrow_struct_layouts().get(&**key).cloned();
             if let Some(sub_layout) = sub_layout {
                 let sub_desigs: Vec<_> = after_first_idx.to_vec();
@@ -427,7 +427,7 @@ impl Lowerer {
             let inner_idx = remaining_index_desigs
                 .iter()
                 .find_map(|d| {
-                    if let Designator::Index(ref idx_expr) = d {
+                    if let Designator::Index(idx_expr) = d {
                         self.eval_const_expr(idx_expr).and_then(|c| c.to_usize())
                     } else {
                         None
@@ -511,7 +511,7 @@ impl Lowerer {
                             }
                         }
                     }
-                    CType::Struct(ref key) | CType::Union(ref key) => {
+                    CType::Struct(key) | CType::Union(key) => {
                         let sub_layout = self.types.borrow_struct_layouts().get(&**key).cloned();
                         if let Some(sub_layout) = sub_layout {
                             self.emit_struct_init(sub_items, base_alloca, &sub_layout, elem_offset);
@@ -659,7 +659,7 @@ impl Lowerer {
             }
         }
 
-        if let CType::Struct(ref key) | CType::Union(ref key) = elem_ty {
+        if let CType::Struct(key) | CType::Union(key) = elem_ty {
             // Array of structs
             let sub_layout = self.types.borrow_struct_layouts().get(&**key).cloned();
             if let Some(sub_layout) = sub_layout {
@@ -752,7 +752,7 @@ impl Lowerer {
         let complex_ctype = elem_ty.clone();
         let mut ai = 0usize;
         for sub_item in sub_items {
-            if let Some(Designator::Index(ref idx_expr)) = sub_item.designators.first() {
+            if let Some(Designator::Index(idx_expr)) = sub_item.designators.first() {
                 if let Some(idx) = self.eval_const_expr_for_designator(idx_expr) {
                     ai = idx;
                 }
@@ -787,7 +787,7 @@ impl Lowerer {
         let elem_is_bool = *elem_ty == CType::Bool;
         let mut ai = 0usize;
         for sub_item in sub_items {
-            if let Some(Designator::Index(ref idx_expr)) = sub_item.designators.first() {
+            if let Some(Designator::Index(idx_expr)) = sub_item.designators.first() {
                 if let Some(idx) = self.eval_const_expr_for_designator(idx_expr) {
                     ai = idx;
                 }
@@ -906,7 +906,7 @@ impl Lowerer {
             }
         }
 
-        if let CType::Struct(ref key) | CType::Union(ref key) = elem_ty {
+        if let CType::Struct(key) | CType::Union(key) = elem_ty {
             // Flat init for array of structs
             let sub_layout = self.types.borrow_struct_layouts().get(&**key).cloned();
             if let Some(sub_layout) = sub_layout {

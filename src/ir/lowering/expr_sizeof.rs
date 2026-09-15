@@ -383,10 +383,10 @@ impl Lowerer {
             }
 
             // Compound literal: size of the type (handle incomplete array types)
-            Expr::CompoundLiteral(ts, ref init, _) => {
+            Expr::CompoundLiteral(ts, init, _) => {
                 let ctype = self.type_spec_to_ctype(ts);
                 match (&ctype, init.as_ref()) {
-                    (CType::Array(ref elem_ct, None), Initializer::List(items)) => {
+                    (CType::Array(elem_ct, None), Initializer::List(items)) => {
                         self.ctype_size(elem_ct).max(1) * items.len()
                     }
                     _ => self.sizeof_type(ts),

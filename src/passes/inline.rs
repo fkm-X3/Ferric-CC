@@ -1822,7 +1822,7 @@ fn remap_instruction(inst: &Instruction, vo: u32, bo: u32) -> Instruction {
             dest_ptr,
             va_list_ptr,
             size,
-            ref eightbyte_classes,
+            eightbyte_classes,
         } => Instruction::VaArgStruct {
             dest_ptr: remap_value(*dest_ptr, vo),
             va_list_ptr: remap_value(*va_list_ptr, vo),

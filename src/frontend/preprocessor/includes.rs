@@ -627,7 +627,7 @@ impl Preprocessor {
                 if candidate.is_file() {
                     // Use canonicalize for comparison to detect same-file
                     let candidate_canon = std::fs::canonicalize(&candidate).ok();
-                    if let (Some(ref cur), Some(ref cand)) = (&current_file_canon, &candidate_canon)
+                    if let (Some(cur), Some(cand)) = (&current_file_canon, &candidate_canon)
                     {
                         if cur == cand {
                             continue;

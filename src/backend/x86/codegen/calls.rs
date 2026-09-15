@@ -52,7 +52,7 @@ impl X86Codegen {
         for &si in stack_indices.iter().rev() {
             match arg_classes[si] {
                 CallArgClass::F128Stack => match &args[si] {
-                    Operand::Const(ref c) => {
+                    Operand::Const(c) => {
                         let x87_bytes: [u8; 10] = match c {
                             IrConst::LongDouble(_, f128_bytes) => {
                                 let x87 =
@@ -75,7 +75,7 @@ impl X86Codegen {
                         self.state.emit("    pushq %rax");
                         self.state.reg_cache.invalidate_all();
                     }
-                    Operand::Value(ref v) => {
+                    Operand::Value(v) => {
                         if self.state.f128_direct_slots.contains(&v.0) {
                             if let Some(slot) = self.state.get_slot(v.0) {
                                 self.state.emit("    subq $16, %rsp");

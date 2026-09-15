@@ -141,7 +141,7 @@ impl<'a> SemaConstEval<'a> {
             Expr::BinaryOp(op, lhs, rhs, _) => {
                 let l = self.eval_const_expr(lhs);
                 let r = self.eval_const_expr(rhs);
-                if let (Some(ref lv), Some(ref rv)) = (&l, &r) {
+                if let (Some(lv), Some(rv)) = (&l, &r) {
                     // Derive operand CTypes for signedness/width determination.
                     let lhs_ctype = self
                         .lookup_expr_type(lhs)
@@ -206,7 +206,7 @@ impl<'a> SemaConstEval<'a> {
             }
 
             // Cast expressions with proper bit-width tracking
-            Expr::Cast(ref target_type, inner, _) => {
+            Expr::Cast(target_type, inner, _) => {
                 let target_ctype = self.type_spec_to_ctype(target_type);
                 let src_val = self.eval_const_expr(inner)?;
 
@@ -304,14 +304,14 @@ impl<'a> SemaConstEval<'a> {
             }
 
             // _Alignof - C11 standard, returns minimum ABI alignment
-            Expr::Alignof(ref ts, _) => {
+            Expr::Alignof(ts, _) => {
                 let align = self.alignof_type_spec(ts);
                 Some(IrConst::I64(align as i64))
             }
 
             // __alignof(type) / __alignof__(type) - GCC extension, returns preferred alignment.
             // On i686: __alignof__(long long) == 8, _Alignof(long long) == 4.
-            Expr::GnuAlignof(ref ts, _) => {
+            Expr::GnuAlignof(ts, _) => {
                 let align = self.preferred_alignof_type_spec(ts);
                 Some(IrConst::I64(align as i64))
             }
@@ -320,7 +320,7 @@ impl<'a> SemaConstEval<'a> {
             // Per C11 6.2.8p3, if the expression names a variable declared with
             // _Alignas or __attribute__((aligned(N))), the result reflects the
             // declared alignment (max of natural and explicit).
-            Expr::AlignofExpr(ref inner_expr, _) => {
+            Expr::AlignofExpr(inner_expr, _) => {
                 // Check for explicit alignment on a variable identifier
                 if let Expr::Identifier(name, _) = inner_expr.as_ref() {
                     if let Some(sym) = self.symbols.lookup(name) {
@@ -336,7 +336,7 @@ impl<'a> SemaConstEval<'a> {
             }
 
             // __alignof__(expr) via GnuAlignof path - returns preferred alignment
-            Expr::GnuAlignofExpr(ref inner_expr, _) => {
+            Expr::GnuAlignofExpr(inner_expr, _) => {
                 if let Expr::Identifier(name, _) = inner_expr.as_ref() {
                     if let Some(sym) = self.symbols.lookup(name) {
                         if let Some(explicit_align) = sym.explicit_alignment {
@@ -373,7 +373,7 @@ impl<'a> SemaConstEval<'a> {
             }
 
             // __builtin_types_compatible_p
-            Expr::BuiltinTypesCompatibleP(ref type1, ref type2, _) => {
+            Expr::BuiltinTypesCompatibleP(type1, type2, _) => {
                 let ctype1 = self.type_spec_to_ctype(type1);
                 let ctype2 = self.type_spec_to_ctype(type2);
                 let compatible = self.ctypes_compatible(&ctype1, &ctype2);
@@ -402,7 +402,7 @@ impl<'a> SemaConstEval<'a> {
     /// Preserves signedness through cast chains for proper widening.
     fn eval_const_expr_as_bits(&self, expr: &Expr) -> Option<(u64, bool)> {
         match expr {
-            Expr::Cast(ref target_type, inner, _) => {
+            Expr::Cast(target_type, inner, _) => {
                 let (bits, _src_signed) = self.eval_const_expr_as_bits(inner)?;
                 let target_ctype = self.type_spec_to_ctype(target_type);
                 let target_width = self.ctype_size(&target_ctype) * 8;
@@ -484,7 +484,7 @@ impl<'a> SemaConstEval<'a> {
     /// Extract the struct type from a (type*)0 pattern.
     fn extract_null_pointer_cast_with_offset(&self, expr: &Expr) -> Option<(TypeSpecifier, usize)> {
         match expr {
-            Expr::Cast(ref type_spec, inner, _) => {
+            Expr::Cast(type_spec, inner, _) => {
                 if let TypeSpecifier::Pointer(inner_ts, _) = type_spec {
                     if const_arith::is_zero_expr(inner) {
                         return Some((*inner_ts.clone(), 0));
@@ -582,7 +582,7 @@ impl<'a> SemaConstEval<'a> {
             return ctype.is_unsigned();
         }
         // For cast expressions, check the target type directly
-        if let Expr::Cast(ref target_type, _, _) = expr {
+        if let Expr::Cast(target_type, _, _) = expr {
             let ctype = self.type_spec_to_ctype(target_type);
             return ctype.is_unsigned();
         }

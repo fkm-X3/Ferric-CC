@@ -665,8 +665,8 @@ fn process_block(block_idx: usize, func: &mut IrFunction, state: &mut GvnState) 
                             ptr_vn: ptr_vn.clone(),
                             ty,
                         };
-                        if let Some((stored_op, gen)) = state.store_fwd_map.get(&fwd_key) {
-                            if *gen == state.load_generation {
+                        if let Some((stored_op, r#gen)) = state.store_fwd_map.get(&fwd_key) {
+                            if *r#gen == state.load_generation {
                                 let stored_op = *stored_op;
                                 // Forward the stored value to the load destination.
                                 // Assign the dest a VN matching the stored value.
@@ -712,8 +712,8 @@ fn process_block(block_idx: usize, func: &mut IrFunction, state: &mut GvnState) 
                     state
                         .load_expr_to_value
                         .get(&expr_key)
-                        .and_then(|&(val, gen)| {
-                            if gen == state.load_generation {
+                        .and_then(|&(val, r#gen)| {
+                            if r#gen == state.load_generation {
                                 Some(val)
                             } else {
                                 None

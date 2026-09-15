@@ -658,7 +658,7 @@ fn resolve_symbols_and_immediates(
     for (i, sym) in input_symbols.iter().enumerate() {
         let op_idx = num_outputs + i;
         if op_idx < operands.len() {
-            if let Some(ref s) = sym {
+            if let Some(s) = sym {
                 operands[op_idx].imm_symbol = Some(s.clone());
                 // Promote to Immediate so the symbol is emitted directly
                 if matches!(

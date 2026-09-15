@@ -858,7 +858,7 @@ impl Lowerer {
             Expr::StringLiteral(_, _)
             | Expr::WideStringLiteral(_, _)
             | Expr::Char16StringLiteral(_, _) => IrType::Ptr,
-            Expr::Cast(ref target_type, _, _) => self.type_spec_to_ir(target_type),
+            Expr::Cast(target_type, _, _) => self.type_spec_to_ir(target_type),
             Expr::UnaryOp(UnaryOp::RealPart, inner, _)
             | Expr::UnaryOp(UnaryOp::ImagPart, inner, _) => {
                 let inner_ct = self.expr_ctype(inner);
@@ -1332,7 +1332,7 @@ impl Lowerer {
                 }
                 None
             }
-            Expr::Cast(ref type_spec, _, _) => Some(self.type_spec_to_ctype(type_spec)),
+            Expr::Cast(type_spec, _, _) => Some(self.type_spec_to_ctype(type_spec)),
             Expr::MemberAccess(base_expr, field_name, _) => {
                 self.get_field_ctype(base_expr, field_name, false)
             }
